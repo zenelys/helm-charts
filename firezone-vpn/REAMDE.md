@@ -1,3 +1,9 @@
+# Firezone VPN Helm Chart
+
+Dependencies:
+
+- Kubernetes >= 1.19.0
+
 ## Parameters
 
 ### All values for chart.
