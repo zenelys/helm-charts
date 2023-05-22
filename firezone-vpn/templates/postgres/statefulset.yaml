@@ -1,0 +1,89 @@
+{{ $image := ((printf "%s/%s:%s" .Values.postgres.image.registry (default "postgres" .Values.postgres.image.repository) (default "15.2" .Values.postgres.image.tag)) | quote) }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+  namespace: {{ include "firezone.namespace" . | quote }}
+  labels:
+    {{- (include "postgres.labels" .) | nindent 4 }}
+    {{- if .Values.postgres.stateful.metadata.labels }}
+      {{- toYaml .Values.postgres.stateful.metadata.labels | nindent 4 }}
+    {{- end }}         
+  {{- if .Values.postgres.stateful.metadata.annotations }}
+  annotations:
+    {{- toYaml .Values.postgres.stateful.metadata.annotations | nindent 4 }}
+  {{- end }}   
+spec:
+
+  serviceName: postgres 
+  replicas: {{ .Values.postgres.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "postgres.labels" . | nindent 6 }}
+      {{- if .Values.postgres.stateful.metadata.labels }}
+      {{- toYaml .Values.postgres.stateful.metadata.labels | nindent 6 }}
+      {{- end }}   
+  template:
+    metadata:
+      {{- if .Values.postgres.stateful.metadata.annotations }}
+      annotations:
+        {{- toYaml .Values.postgres.stateful.metadata.annotations | nindent 8 }}
+      {{- end }}       
+      labels:
+        {{- include "postgres.labels" . | nindent 8 }}
+      {{- if .Values.postgres.stateful.metadata.labels }}
+        {{- toYaml .Values.postgres.stateful.metadata.labels | nindent 8 }}
+      {{- end }} 
+    spec:
+ 
+      containers:
+        - name: {{ .Chart.Name }}-postgres
+          image: {{ $image }}
+          imagePullPolicy: {{ .Values.postgres.image.pullPolicy }}
+          ports:
+            - name: db
+              containerPort: {{ .Values.postgres.service.port }}
+              protocol: TCP
+
+          {{- if .Values.postgres.resources }}
+          resources:
+            {{- toYaml .Values.postgres.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+          - name: postgres
+            mountPath: /data
+          envFrom:
+            - secretRef:
+                name: {{ .Values.postgres.secret.name  | default  "postgres"  }}               
+  {{- if .Values.postgres.persistence.enabled }}
+  volumeClaimTemplates:
+  - metadata:
+      name: postgres
+    spec:
+      accessModes:
+        {{- range .Values.postgres.persistence.accessModes }}
+        - {{ . | quote }}
+        {{- end }}
+      resources:
+        requests:
+          storage: {{ .Values.postgres.persistence.size | quote }}
+  {{- else }}
+      volumes:
+      - name: postgres
+        emptyDir:
+          sizeLimit: 500Mi
+  {{- end }}      
+
+
+      {{- if .Values.postgres.nodeSelector }}
+      nodeSelector:
+        {{- toYaml .Values.postgres.nodeSelector | nindent 8 }}
+      {{- end }}
+      {{- if .Values.postgres.affinity }}
+      affinity:
+        {{- toYaml .Values.postgres.affinity | nindent 8 }}
+      {{- end }}
+      {{- if .Values.postgres.tolerations }}
+      tolerations:
+        {{- toYaml .Values.postgres.tolerations | nindent 8 }}
+      {{- end }}       

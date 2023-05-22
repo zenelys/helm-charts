@@ -1,0 +1,245 @@
+## @section Firezone VPN.
+## @param firezone.deployment.metadata.name Firezone deployment name (Optional).
+## @param firezone.deployment.metadata.labels Annotations for firezone deployment.
+## @param firezone.deployment.metadata.annotations Extra labels for deployment. 
+
+firezone:
+  deployment:
+    metadata:
+      name: ""
+      labels: {}
+      annotations: {}
+
+
+## @param firezone.namespaceOverride Namespace for chart components
+  namespaceOverride: ""
+
+## @param firezone.replicaCount The number of replicas (instances) of the application that should be running
+  replicaCount: 2
+
+
+## @param firezone.strategy.type Deployment update strategy
+## @param firezone.strategy.rollingUpdate.maxUnavailable max unavailable replicas during rolling update process
+## @param firezone.strategy.rollingUpdate.maxSurge maximum number of Pods that can be created over the desired number of Pods
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 50%
+      maxSurge: 25%
+
+## @param firezone.image.registry Specifies The Container image registry.
+## @param firezone.image.repository Specifies the Container image to use for the application and its associated settings.
+## @param firezone.image.pullPolicy Specifies the Image PullPolicy.
+## @param firezone.image.tag Overrides the image tag whose default is the chart appVersion.
+
+  image: 
+    registry: "firezone"
+    repository: ""
+    pullPolicy: IfNotPresent
+    tag: ""
+
+## @param firezone.resources.limits.cpu Resources limit for cpu.
+## @param firezone.resources.limits.memory Resources limits for memory.
+## @param firezone.resources.requests.cpu Resources requests for cpu.
+## @param firezone.resources.requests.memory Resources requests for memory.
+
+  resources: {}
+    # requests:
+    #   memory: ""
+    #   cpu: ""
+    # limits:
+    #   memory: ""
+    #   cpu: ""
+ 
+## @section Firezone Node Selectors, Tolerations, Affinities. 
+## @param firezone.nodeSelector Specifies settings for node selection when scheduling pods.
+  nodeSelector: {}
+
+## @param firezone.tolerations Specifies Kubernetes tolerations for the pods created by the chart.
+  tolerations: [] 
+
+## @param firezone.affinity Specifies Kubernetes affinity rules for the pods created by the chart.
+  affinity: {}
+
+## @section Firezone web service configuration.
+## @param firezone.serviceweb.metadata.name firezone web service name (Optional).
+## @param firezone.serviceweb.metadata.labels Extra labels for firezone web service.
+## @param firezone.serviceweb.metadata.annotations Annotations for firezone web service.
+## @param firezone.serviceweb.type firezone web service type.
+## @param firezone.serviceweb.port Port to expose for firezone web service.
+
+  serviceweb:
+    metadata:
+      name: ""
+      labels: {}
+      annotations: {}
+    type: ClusterIP 
+    port: 13000
+
+## @section Firezone vpn traffic service configuration.
+## @param firezone.servicewireguard.metadata.name firezone vpn traffic service name (Optional).
+## @param firezone.servicewireguard.metadata.labels Extra labels for firezone vpn traffic service.
+## @param firezone.servicewireguard.metadata.annotations Annotations for firezone vpn traffic service.
+## @param firezone.servicewireguard.type firezone vpn traffic service type.
+## @param firezone.servicewireguard.loadBalancerClass LoadbalancerClass for vpn traffic service If type is LoadBalancer.
+## @param firezone.servicewireguard.port Port to expose for firezone vpn traffic service.
+  servicewireguard:
+    metadata:
+      name: ""
+      labels: {}
+      annotations: {}
+    type: ClusterIP
+    # IF Type LoadBalancer  
+    loadBalancerClass: 
+      # key: value
+    port: 51820
+
+
+## @section Firezone Ingress Specifies settings for the Kubernetes Ingress resource.
+## @param firezone.ingress.enabled To enable or disable ingress.
+## @param firezone.ingress.className Ingress Class name.
+## @param firezone.ingress.name Ingress name.
+## @param firezone.ingress.labels Ingress resource labels.
+## @param firezone.ingress.annotations Ingress resource annotations.
+## @param firezone.ingress.host Application hostname.
+## @param firezone.ingress.tls.hosts To Application hostname in TLS settings.
+## @param firezone.ingress.tls.enabled To enable or disable TLS
+## @param firezone.ingress.tls.secretName TLS secret name of the ingress. If enabled and no secretName specified, new one will be created.
+
+  ingress: 
+    enabled: false
+    className: "nginx"
+    name: ""
+    labels: {}
+    annotations: {}  
+    host: example.host
+    tls:
+      hosts:
+      - example.host
+      enabled: false
+      secretName: ""
+
+## @section Secret for Firezone.
+
+## @param firezone.secret.name firezone secret name.
+## @param firezone.secret.labels firezone secret labels.
+## @param firezone.secret.annotations firezone secret annotations.
+## @param firezone.secret.data.EXTERNAL_URL firezone secret data EXTERNAL_URL always required.
+## @param firezone.secret.override If You want to change default values.
+
+  secret:
+    name: ""
+    labels: {}
+    annotations:  {}
+    data:
+      # # Required
+      EXTERNAL_URL: https://example.host
+    override: []
+
+## @section Firezone Persistence Volume.
+## @param firezone.persistence.type persistence type.
+## @param firezone.persistence.enabled For enable/disable persisyence(If desabled You can loss data after pod restarting)
+## @param firezone.persistence.storageClassName Storage class name.
+## @param firezone.persistence.accessModes Access modes for storage.
+## @param firezone.persistence.size Persistence volume size.
+  persistence:
+    type: pvc
+    enabled: false
+    storageClassName: efs-sc
+    accessModes:
+      - ReadWriteOnce
+    size: 10Gi
+
+
+## @section Firezone postgres db statefulset.
+## @param postgres.stateful.metadata.name postgres statedulset name (Optional).
+## @param postgres.stateful.metadata.labels Annotations for postgres statefulset.
+## @param postgres.stateful.metadata.annotations Extra labels for statefulset. 
+postgres:
+  stateful:
+    metadata:
+      name: ""
+      labels: {}
+      annotations: {} 
+
+## @param postgres.replicaCount The number of replicas (instances) of the application that should be running
+  replicaCount: 1
+
+## @param postgres.image.registry Specifies The Container image registry.
+## @param postgres.image.repository Specifies the Container image to use for the application and its associated settings.
+## @param postgres.image.pullPolicy Specifies the Image PullPolicy.
+## @param postgres.image.tag Overrides the image tag whose default is the chart appVersion.
+
+  image: 
+    registry: "library"
+    repository: ""
+    pullPolicy: IfNotPresent
+    tag: ""
+
+
+## @param postgres.resources.limits.cpu Resources limit for cpu.
+## @param postgres.resources.limits.memory Resources limits for memory.
+## @param postgres.resources.requests.cpu Resources requests for cpu.
+## @param postgres.resources.requests.memory Resources requests for memory.
+
+  resources: {}
+    # requests:
+    #   memory: ""
+    #   cpu: ""
+    # limits:
+    #   memory: ""
+    #   cpu: ""
+
+ 
+## @section Postgres Node Selectors, Tolerations, Affinities. 
+## @param postgres.nodeSelector Specifies settings for node selection when scheduling pods.
+  nodeSelector: {}
+
+## @param postgres.tolerations Specifies Kubernetes tolerations for the pods created by the chart.
+  tolerations: [] 
+
+## @param postgres.affinity Specifies Kubernetes affinity rules for the pods created by the chart.
+  affinity: {}
+
+## @section Postgres db service configuration.
+## @param postgres.service.metadata.name postgres db service name (Optional).
+## @param postgres.service.metadata.labels Extra labels for postgres db service.
+## @param postgres.service.metadata.annotations Annotations for postgres db service.
+## @param postgres.service.type postgres dbservice type.
+## @param postgres.service.port Port to expose for postgres db service.
+
+  service:
+    metadata:
+      name: ""
+      labels: {}
+      annotations: {} 
+    type: ClusterIP
+    port: 5432
+
+
+## @section Secret for Postgres.
+
+## @param postgres.secret.name postgres secret name.
+## @param postgres.secret.labels postgres secret labels.
+## @param postgres.secret.annotations postgres secret annotations.
+## @param postgres.secret.data postgres secret data.
+
+  secret:
+    name: ""
+    labels: {}
+    annotations: {}
+    data: []
+
+## @section Postgres Persistence Volume.
+## @param postgres.persistence.type persistence type.
+## @param postgres.persistence.enabled For enable/disable persisyence(If desabled You can loss data after pod restarting)
+## @param postgres.persistence.storageClassName Storage class name.
+## @param postgres.persistence.accessModes Access modes for storage.
+## @param postgres.persistence.size Persistence volume size.
+  persistence:
+    type: pvc
+    enabled: false
+    storageClassName: efs-sc
+    accessModes:
+      - ReadWriteOnce
+    size: 10Gi

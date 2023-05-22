@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "firezone.servicewireguard.name" . }}
+  labels:
+    {{- include "firezone.labels" . | nindent 4 }}
+  namespace: {{ include "firezone.namespace" . | quote }}  
+spec:
+  type: {{ .Values.firezone.servicewireguard.type }}
+  {{- if .Values.firezone.servicewireguard.loadBalancerClass }}
+  {{- toYaml .Values.firezone.servicewireguard.loadBalancerClass | nindent 2 }}
+  {{- end }}
+  ports:
+    - port: {{ .Values.firezone.servicewireguard.port }}
+      targetPort: wireguard
+      protocol: UDP
+      name: wireguard
+  selector:
+    {{- include "firezone.selectorLabels" . | nindent 4 }}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "firezone.serviceweb.name" . }}-web
+  labels:
+    {{- include "firezone.labels" . | nindent 4 }}
+  namespace: {{ include "firezone.namespace" . | quote }}  
+spec:
+  type: {{ .Values.firezone.serviceweb.type }}
+  {{- if .Values.firezone.serviceweb.loadBalancerClass }}
+  {{- toYaml .Values.firezone.serviceweb.loadBalancerClass | nindent 2 }}
+  {{- end }}
+  ports:
+    - port: {{ .Values.firezone.serviceweb.port }}
+      targetPort: web
+      protocol: TCP
+      name: web
+  selector:
+    {{- include "firezone.selectorLabels" . | nindent 4 }}

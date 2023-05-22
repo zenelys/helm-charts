@@ -1,0 +1,31 @@
+{{- if and .Values.firezone.persistence.enabled (not .Values.firezone.persistence.existingClaim) (eq .Values.firezone.persistence.type "pvc")}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: firezone-claim
+  namespace: {{ include "firezone.namespace" . | quote }}
+  labels: {{- (include "firezone.labels" .) | nindent 4 }}
+    {{- if .Values.firezone.persistence.labels }}
+    {{- toYaml .Values.firezone.persistence.labels | nindent 4 }}
+    {{- end }} 
+  {{- with .Values.firezone.persistence.annotations  }}
+  annotations:  
+    {{- toYaml .Values.firezone.persistence.annotations | nindent 4 }}
+  {{- end }} 
+spec:
+  accessModes:
+    {{- range .Values.firezone.persistence.accessModes }}
+    - {{ . | quote }}
+    {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.firezone.persistence.size | quote }}
+  {{- with .Values.firezone.persistence.storageClassName }}
+  storageClassName: {{ . }}
+  {{- end }}
+  {{- with .Values.firezone.persistence.selectorLabels }}
+  selector:
+    matchLabels:
+    {{- toYaml . | nindent 6 }}
+  {{- end }}
+{{- end }}

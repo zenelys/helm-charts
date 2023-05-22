@@ -1,0 +1,114 @@
+{{ $image := ((printf "%s/%s:%s" .Values.firezone.image.registry (default "firezone" .Values.firezone.image.repository) (default "0.7.26" .Values.firezone.image.tag)) | quote) }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "firezone.fullname" . }}
+  namespace: {{ include "firezone.namespace" . | quote }}
+  labels:
+    {{- (include "firezone.labels" .) | nindent 4 }}
+    {{- if .Values.firezone.deployment.metadata.labels }}
+      {{- toYaml .Values.firezone.deployment.metadata.labels | nindent 4 }}
+    {{- end }}         
+  {{- if .Values.firezone.deployment.metadata.annotations }}
+  annotations:
+    {{- toYaml .Values.firezone.deployment.metadata.annotations | nindent 4 }}
+  {{- end }}    
+spec:
+  replicas: {{ .Values.firezone.replicaCount }}
+  strategy:
+    {{- toYaml .Values.firezone.strategy | nindent 4 }}  
+  selector:
+    matchLabels:
+      {{- include "firezone.labels" . | nindent 6 }}
+      {{- if .Values.firezone.deployment.metadata.labels }}
+      {{- toYaml .Values.firezone.deployment.metadata.labels | nindent 6 }}
+      {{- end }}       
+  template:
+    metadata:
+      {{- if .Values.firezone.deployment.metadata.annotations }}
+      annotations:
+        {{- toYaml .Values.firezone.deployment.metadata.annotations | nindent 8 }}
+      {{- end }}       
+      labels:
+        {{- include "firezone.labels" . | nindent 8 }}
+      {{- if .Values.firezone.deployment.metadata.labels }}
+        {{- toYaml .Values.firezone.deployment.metadata.labels | nindent 8 }}
+      {{- end }}        
+    spec:
+      initContainers:
+        - name: init-firezone
+          image: firezone/firezone:0.7.26
+          envFrom:
+            - secretRef:
+                name: {{ .Values.firezone.secret.name  | default (include "firezone.name" .) }}
+          command:
+          - sh
+          - -c
+          - |
+            {
+              mkdir  /var/firezone;
+              bin/migrate && bin/create-or-reset-admin;
+            }
+          volumeMounts:
+            - name: firezone
+              mountPath: /var/firezone   
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+            capabilities:
+              add: 
+                - NET_ADMIN
+                - SYS_MODULE            
+      containers:
+        - name: {{ .Chart.Name }}
+          image: {{ $image }}
+          imagePullPolicy: {{ .Values.firezone.image.pullPolicy }}
+          ports:
+            - name: web
+              containerPort: {{ .Values.firezone.serviceweb.port }}
+              protocol: TCP
+            - name: wireguard
+              containerPort: {{ .Values.firezone.servicewireguard.port }}
+              protocol: UDP
+
+          {{- if .Values.firezone.resources }}
+          resources:
+            {{- toYaml .Values.firezone.resources | nindent 12 }}
+          {{- end }}
+          envFrom:
+            - secretRef:
+                name: {{ .Values.firezone.secret.name  | default (include "firezone.name" .) }}
+          volumeMounts:
+            - name: firezone
+              mountPath: /var/firezone       
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+            capabilities:
+              add: 
+                - NET_ADMIN
+                - SYS_MODULE
+      {{- if .Values.firezone.persistence.enabled }}
+      volumes:
+        - name: firezone
+          persistentVolumeClaim:
+            claimName: firezone-claim      
+      {{- else }}
+      volumes:
+        - name: firezone
+          emptyDir:
+            sizeLimit: 500Mi
+      {{- end }}      
+
+      {{- if .Values.firezone.nodeSelector }}
+      nodeSelector:
+        {{- toYaml .Values.firezone.nodeSelector | nindent 8 }}
+      {{- end }}
+      {{- if .Values.firezone.affinity }}
+      affinity:
+        {{- toYaml .Values.firezone.affinity | nindent 8 }}
+      {{- end }}
+      {{- if .Values.firezone.tolerations }}
+      tolerations:
+        {{- toYaml .Values.firezone.tolerations | nindent 8 }}
+      {{- end }}
