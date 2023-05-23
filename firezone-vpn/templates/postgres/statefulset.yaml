@@ -35,7 +35,18 @@ spec:
         {{- toYaml .Values.postgres.stateful.metadata.labels | nindent 8 }}
       {{- end }} 
     spec:
- 
+       {{- if .Values.postgres.nodeSelector }}
+      nodeSelector:
+        {{- toYaml .Values.postgres.nodeSelector | nindent 8 }}
+      {{- end }}
+      {{- if .Values.postgres.affinity }}
+      affinity:
+        {{- toYaml .Values.postgres.affinity | nindent 8 }}
+      {{- end }}
+      {{- if .Values.postgres.tolerations }}
+      tolerations:
+        {{- toYaml .Values.postgres.tolerations | nindent 8 }}
+      {{- end }}  
       containers:
         - name: {{ .Chart.Name }}-postgres
           image: {{ $image }}
@@ -74,17 +85,4 @@ spec:
         emptyDir:
           sizeLimit: 500Mi
   {{- end }}      
-
-
-      {{- if .Values.postgres.nodeSelector }}
-      nodeSelector:
-        {{- toYaml .Values.postgres.nodeSelector | nindent 8 }}
-      {{- end }}
-      {{- if .Values.postgres.affinity }}
-      affinity:
-        {{- toYaml .Values.postgres.affinity | nindent 8 }}
-      {{- end }}
-      {{- if .Values.postgres.tolerations }}
-      tolerations:
-        {{- toYaml .Values.postgres.tolerations | nindent 8 }}
-      {{- end }}       
+     
