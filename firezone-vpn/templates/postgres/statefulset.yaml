@@ -64,6 +64,7 @@ spec:
         {{- range .Values.postgres.persistence.accessModes }}
         - {{ . | quote }}
         {{- end }}
+      storageClassName: {{ .Values.postgres.persistence.storageClassName | quote }}  
       resources:
         requests:
           storage: {{ .Values.postgres.persistence.size | quote }}
