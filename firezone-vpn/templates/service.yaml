@@ -5,6 +5,10 @@ metadata:
   labels:
     {{- include "firezone.labels" . | nindent 4 }}
   namespace: {{ include "firezone.namespace" . | quote }}  
+  {{- if .Values.firezone.servicewireguard.metadata.annotations }}
+  annotations:
+    {{- toYaml .Values.firezone.servicewireguard.metadata.annotations | nindent 4 }}
+  {{- end }}   
 spec:
   type: {{ .Values.firezone.servicewireguard.type }}
   {{- if .Values.firezone.servicewireguard.loadBalancerClass }}
@@ -26,6 +30,10 @@ metadata:
   labels:
     {{- include "firezone.labels" . | nindent 4 }}
   namespace: {{ include "firezone.namespace" . | quote }}  
+  {{- if .Values.firezone.serviceweb.metadata.annotations }}
+  annotations:
+    {{- toYaml .Values.firezone.serviceweb.metadata.annotations | nindent 4 }}
+  {{- end }}   
 spec:
   type: {{ .Values.firezone.serviceweb.type }}
   {{- if .Values.firezone.serviceweb.loadBalancerClass }}
