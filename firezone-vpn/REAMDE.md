@@ -93,10 +93,9 @@ Example with override.
     name: "firezone"
     labels: {}
     annotations: {}  
-    data:
-      ## EXTERNAL_URL  Required value always.
-      EXTERNAL_URL: https://example.host
+    data: []
     override:
+      EXTERNAL_URL: https://example.host
       VERSION: value from .env file
       DEFAULT_ADMIN_EMAIL: value from .env file
       DEFAULT_ADMIN_PASSWORD: value from .env file
