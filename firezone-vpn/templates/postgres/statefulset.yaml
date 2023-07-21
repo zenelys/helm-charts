@@ -1,3 +1,4 @@
+{{- if .Values.postgres.enabled }}
 {{ $image := ((printf "%s/%s:%s" .Values.postgres.image.registry (default "postgres" .Values.postgres.image.repository) (default "15.2" .Values.postgres.image.tag)) | quote) }}
 apiVersion: apps/v1
 kind: StatefulSet
@@ -34,8 +35,8 @@ spec:
       {{- if .Values.postgres.stateful.metadata.labels }}
         {{- toYaml .Values.postgres.stateful.metadata.labels | nindent 8 }}
       {{- end }} 
-    spec:
-       {{- if .Values.postgres.nodeSelector }}
+    spec:   
+      {{- if .Values.postgres.nodeSelector }}
       nodeSelector:
         {{- toYaml .Values.postgres.nodeSelector | nindent 8 }}
       {{- end }}
@@ -49,13 +50,12 @@ spec:
       {{- end }}  
       containers:
         - name: {{ .Chart.Name }}-postgres
-          image: {{ $image }}
+          image: {{ $image }}          
           imagePullPolicy: {{ .Values.postgres.image.pullPolicy }}
           ports:
             - name: db
               containerPort: {{ .Values.postgres.service.port }}
               protocol: TCP
-
           {{- if .Values.postgres.resources }}
           resources:
             {{- toYaml .Values.postgres.resources | nindent 12 }}
@@ -75,7 +75,7 @@ spec:
         {{- range .Values.postgres.persistence.accessModes }}
         - {{ . | quote }}
         {{- end }}
-      storageClassName: {{ .Values.postgres.persistence.storageClassName | quote }}  
+      storageClassName: {{ .Values.postgres.persistence.storageClassName | quote }}
       resources:
         requests:
           storage: {{ .Values.postgres.persistence.size | quote }}
@@ -85,4 +85,6 @@ spec:
         emptyDir:
           sizeLimit: 500Mi
   {{- end }}      
+{{- end }}
+
      

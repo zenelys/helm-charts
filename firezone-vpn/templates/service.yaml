@@ -10,6 +10,12 @@ metadata:
     {{- toYaml .Values.firezone.servicewireguard.metadata.annotations | nindent 4 }}
   {{- end }}   
 spec:
+  {{- if .Values.firezone.servicewireguard.externalIPs }}
+  externalIPs:
+  {{- range .Values.firezone.servicewireguard.externalIPs }}
+    - {{ . }}
+  {{- end }}
+  {{- end }}
   type: {{ .Values.firezone.servicewireguard.type }}
   {{- if .Values.firezone.servicewireguard.loadBalancerClass }}
   {{- toYaml .Values.firezone.servicewireguard.loadBalancerClass | nindent 2 }}

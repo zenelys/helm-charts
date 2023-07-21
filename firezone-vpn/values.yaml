@@ -15,7 +15,7 @@ firezone:
   namespaceOverride: ""
 
 ## @param firezone.replicaCount The number of replicas (instances) of the application that should be running
-  replicaCount: 2
+  replicaCount: 1
 
 
 ## @param firezone.strategy.type Deployment update strategy
@@ -24,7 +24,7 @@ firezone:
   strategy:
     type: RollingUpdate
     rollingUpdate:
-      maxUnavailable: 50%
+      maxUnavailable: 25%
       maxSurge: 25%
 
 ## @param firezone.image.registry Specifies The Container image registry.
@@ -38,10 +38,7 @@ firezone:
     pullPolicy: IfNotPresent
     tag: ""
 
-## @param firezone.resources.limits.cpu Resources limit for cpu.
-## @param firezone.resources.limits.memory Resources limits for memory.
-## @param firezone.resources.requests.cpu Resources requests for cpu.
-## @param firezone.resources.requests.memory Resources requests for memory.
+## @param firezone.resources Resources configuration for Firezone.
 
   resources: {}
     # requests:
@@ -62,10 +59,10 @@ firezone:
   affinity: {}
 
 ## @section Firezone web service configuration.
-## @param firezone.serviceweb.metadata.name firezone web service name (Optional).
+## @param firezone.serviceweb.metadata.name Firezone web service name (Optional).
 ## @param firezone.serviceweb.metadata.labels Extra labels for firezone web service.
 ## @param firezone.serviceweb.metadata.annotations Annotations for firezone web service.
-## @param firezone.serviceweb.type firezone web service type.
+## @param firezone.serviceweb.type Firezone web service type.
 ## @param firezone.serviceweb.port Port to expose for firezone web service.
 
   serviceweb:
@@ -77,10 +74,10 @@ firezone:
     port: 13000
 
 ## @section Firezone vpn traffic service configuration.
-## @param firezone.servicewireguard.metadata.name firezone vpn traffic service name (Optional).
+## @param firezone.servicewireguard.metadata.name Firezone vpn traffic service name (Optional).
 ## @param firezone.servicewireguard.metadata.labels Extra labels for firezone vpn traffic service.
 ## @param firezone.servicewireguard.metadata.annotations Annotations for firezone vpn traffic service.
-## @param firezone.servicewireguard.type firezone vpn traffic service type.
+## @param firezone.servicewireguard.type Firezone vpn traffic service type.
 ## @param firezone.servicewireguard.loadBalancerClass LoadbalancerClass for vpn traffic service If type is LoadBalancer.
 ## @param firezone.servicewireguard.port Port to expose for firezone vpn traffic service.
   servicewireguard:
@@ -108,7 +105,7 @@ firezone:
 
   ingress: 
     enabled: false
-    className: "nginx"
+    className: ""
     name: ""
     labels: {}
     annotations: {}  
@@ -121,20 +118,15 @@ firezone:
 
 ## @section Secret for Firezone.
 
-## @param firezone.secret.name firezone secret name.
-## @param firezone.secret.labels firezone secret labels.
-## @param firezone.secret.annotations firezone secret annotations.
-## @param firezone.secret.data.EXTERNAL_URL firezone secret data EXTERNAL_URL always required.
-## @param firezone.secret.override If You want to change default values.
-
+## @param firezone.secret.name Firezone secret name.
+## @param firezone.secret.labels Firezone secret labels.
+## @param firezone.secret.annotations Firezone secret annotations.
+## @param firezone.secret.data If You want to change default values.
   secret:
     name: ""
     labels: {}
-    annotations:  {}
-    data:
-      # # Required
-      EXTERNAL_URL: https://example.host
-    override: []
+    annotations: {}
+    data: [] 
 
 ## @section Firezone Persistence Volume.
 ## @param firezone.persistence.type persistence type.
@@ -145,17 +137,19 @@ firezone:
   persistence:
     type: pvc
     enabled: false
-    storageClassName: efs-sc
+    storageClassName: ""
     accessModes:
       - ReadWriteOnce
     size: 10Gi
 
 
 ## @section Firezone postgres db statefulset.
-## @param postgres.stateful.metadata.name postgres statedulset name (Optional).
+## @param postgres.enabled Enable/disable PostgreSQL.(Optional).
+## @param postgres.stateful.metadata.name Postgres statedulset name (Optional).
 ## @param postgres.stateful.metadata.labels Annotations for postgres statefulset.
 ## @param postgres.stateful.metadata.annotations Extra labels for statefulset. 
 postgres:
+  enabled: true
   stateful:
     metadata:
       name: ""
@@ -177,10 +171,7 @@ postgres:
     tag: ""
 
 
-## @param postgres.resources.limits.cpu Resources limit for cpu.
-## @param postgres.resources.limits.memory Resources limits for memory.
-## @param postgres.resources.requests.cpu Resources requests for cpu.
-## @param postgres.resources.requests.memory Resources requests for memory.
+## @param postgres.resources Resources configuration for Postgres.
 
   resources: {}
     # requests:
@@ -202,10 +193,10 @@ postgres:
   affinity: {}
 
 ## @section Postgres db service configuration.
-## @param postgres.service.metadata.name postgres db service name (Optional).
+## @param postgres.service.metadata.name Postgres db service name (Optional).
 ## @param postgres.service.metadata.labels Extra labels for postgres db service.
 ## @param postgres.service.metadata.annotations Annotations for postgres db service.
-## @param postgres.service.type postgres dbservice type.
+## @param postgres.service.type Postgres dbservice type.
 ## @param postgres.service.port Port to expose for postgres db service.
 
   service:
@@ -219,10 +210,10 @@ postgres:
 
 ## @section Secret for Postgres.
 
-## @param postgres.secret.name postgres secret name.
-## @param postgres.secret.labels postgres secret labels.
-## @param postgres.secret.annotations postgres secret annotations.
-## @param postgres.secret.data postgres secret data.
+## @param postgres.secret.name Postgres secret name.
+## @param postgres.secret.labels Postgres secret labels.
+## @param postgres.secret.annotations Postgres secret annotations.
+## @param postgres.secret.data Postgres secret data.
 
   secret:
     name: ""
@@ -231,7 +222,7 @@ postgres:
     data: []
 
 ## @section Postgres Persistence Volume.
-## @param postgres.persistence.type persistence type.
+## @param postgres.persistence.type Persistence type.
 ## @param postgres.persistence.enabled For enable/disable persisyence(If desabled You can loss data after pod restarting)
 ## @param postgres.persistence.storageClassName Storage class name.
 ## @param postgres.persistence.accessModes Access modes for storage.
@@ -239,7 +230,7 @@ postgres:
   persistence:
     type: pvc
     enabled: false
-    storageClassName: efs-sc
+    storageClassName: ""
     accessModes:
       - ReadWriteOnce
     size: 10Gi
