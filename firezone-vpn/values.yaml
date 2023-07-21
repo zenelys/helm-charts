@@ -1,4 +1,4 @@
-## @section Firezone VPN.
+## @section Firezone VPN
 ## @param firezone.deployment.metadata.name Firezone deployment name (Optional).
 ## @param firezone.deployment.metadata.labels Annotations for firezone deployment.
 ## @param firezone.deployment.metadata.annotations Extra labels for deployment. 
@@ -48,7 +48,7 @@ firezone:
     #   memory: ""
     #   cpu: ""
  
-## @section Firezone Node Selectors, Tolerations, Affinities. 
+## @section Firezone Node Selectors, Tolerations, Affinities
 ## @param firezone.nodeSelector Specifies settings for node selection when scheduling pods.
   nodeSelector: {}
 
@@ -58,7 +58,7 @@ firezone:
 ## @param firezone.affinity Specifies Kubernetes affinity rules for the pods created by the chart.
   affinity: {}
 
-## @section Firezone web service configuration.
+## @section Firezone web service configuration
 ## @param firezone.serviceweb.metadata.name Firezone web service name (Optional).
 ## @param firezone.serviceweb.metadata.labels Extra labels for firezone web service.
 ## @param firezone.serviceweb.metadata.annotations Annotations for firezone web service.
@@ -73,7 +73,7 @@ firezone:
     type: ClusterIP 
     port: 13000
 
-## @section Firezone vpn traffic service configuration.
+## @section Firezone vpn traffic service configuration
 ## @param firezone.servicewireguard.metadata.name Firezone vpn traffic service name (Optional).
 ## @param firezone.servicewireguard.metadata.labels Extra labels for firezone vpn traffic service.
 ## @param firezone.servicewireguard.metadata.annotations Annotations for firezone vpn traffic service.
@@ -92,7 +92,7 @@ firezone:
     port: 51820
 
 
-## @section Firezone Ingress Specifies settings for the Kubernetes Ingress resource.
+## @section Firezone Ingress Specifies settings for the Kubernetes Ingress resource
 ## @param firezone.ingress.enabled To enable or disable ingress.
 ## @param firezone.ingress.className Ingress Class name.
 ## @param firezone.ingress.name Ingress name.
@@ -116,8 +116,7 @@ firezone:
       enabled: false
       secretName: ""
 
-## @section Secret for Firezone.
-
+## @section Secret for Firezone
 ## @param firezone.secret.name Firezone secret name.
 ## @param firezone.secret.labels Firezone secret labels.
 ## @param firezone.secret.annotations Firezone secret annotations.
@@ -128,7 +127,7 @@ firezone:
     annotations: {}
     data: [] 
 
-## @section Firezone Persistence Volume.
+## @section Firezone Persistence Volume
 ## @param firezone.persistence.type persistence type.
 ## @param firezone.persistence.enabled For enable/disable persisyence(If desabled You can loss data after pod restarting)
 ## @param firezone.persistence.storageClassName Storage class name.
@@ -143,7 +142,7 @@ firezone:
     size: 10Gi
 
 
-## @section Firezone postgres db statefulset.
+## @section Firezone postgres db statefulset
 ## @param postgres.enabled Enable/disable PostgreSQL.(Optional).
 ## @param postgres.stateful.metadata.name Postgres statedulset name (Optional).
 ## @param postgres.stateful.metadata.labels Annotations for postgres statefulset.
@@ -182,7 +181,7 @@ postgres:
     #   cpu: ""
 
  
-## @section Postgres Node Selectors, Tolerations, Affinities. 
+## @section Postgres Node Selectors, Tolerations, Affinities
 ## @param postgres.nodeSelector Specifies settings for node selection when scheduling pods.
   nodeSelector: {}
 
@@ -192,7 +191,7 @@ postgres:
 ## @param postgres.affinity Specifies Kubernetes affinity rules for the pods created by the chart.
   affinity: {}
 
-## @section Postgres db service configuration.
+## @section Postgres db service configuration
 ## @param postgres.service.metadata.name Postgres db service name (Optional).
 ## @param postgres.service.metadata.labels Extra labels for postgres db service.
 ## @param postgres.service.metadata.annotations Annotations for postgres db service.
@@ -208,7 +207,7 @@ postgres:
     port: 5432
 
 
-## @section Secret for Postgres.
+## @section Secret for Postgres
 
 ## @param postgres.secret.name Postgres secret name.
 ## @param postgres.secret.labels Postgres secret labels.
@@ -221,7 +220,7 @@ postgres:
     annotations: {}
     data: []
 
-## @section Postgres Persistence Volume.
+## @section Postgres Persistence Volume
 ## @param postgres.persistence.type Persistence type.
 ## @param postgres.persistence.enabled For enable/disable persisyence(If desabled You can loss data after pod restarting)
 ## @param postgres.persistence.storageClassName Storage class name.

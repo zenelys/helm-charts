@@ -98,4 +98,3 @@ Service db
 {{- define "postgres.service.name" -}}
 {{ default (printf "%s-%s" "postgres" "service") .Values.postgres.service.metadata.name }}
 {{- end }}
-
