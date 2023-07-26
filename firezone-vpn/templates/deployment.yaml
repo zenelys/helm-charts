@@ -1,11 +1,11 @@
-{{ $image := ((printf "%s/%s:%s" .Values.firezone.image.registry (default "firezone" .Values.firezone.image.repository) (default "0.7.26" .Values.firezone.image.tag)) | quote) }}
+{{ $image := ((printf "%s/%s:%s" .Values.firezone.image.registry (default "firezone" .Values.firezone.image.repository) (default "latest" .Values.firezone.image.tag)) | quote) }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "firezone.fullname" . }}
   namespace: {{ include "firezone.namespace" . | quote }}
   labels:
-    {{- (include "firezone.labels" .) | nindent 4 }}
+    {{- include "firezone.labels" . | nindent 4 }}
     {{- if .Values.firezone.deployment.metadata.labels }}
       {{- toYaml .Values.firezone.deployment.metadata.labels | nindent 4 }}
     {{- end }}         
@@ -19,7 +19,7 @@ spec:
     {{- toYaml .Values.firezone.strategy | nindent 4 }}  
   selector:
     matchLabels:
-      {{- include "firezone.labels" . | nindent 6 }}
+      {{- include "firezone.selectorLabels" . | nindent 6 }}
       {{- if .Values.firezone.deployment.metadata.labels }}
       {{- toYaml .Values.firezone.deployment.metadata.labels | nindent 6 }}
       {{- end }}       
@@ -37,7 +37,7 @@ spec:
     spec:
       initContainers:
         - name: init-firezone
-          image: firezone/firezone:0.7.26
+          image: firezone/firezone:latest
           envFrom:
             - secretRef:
                 name: {{ .Values.firezone.secret.name  | default (include "firezone.name" .) }}
@@ -46,6 +46,7 @@ spec:
           - -c
           - |
             {
+              sleep 15; 
               mkdir  /var/firezone;
               bin/migrate && bin/create-or-reset-admin;
             }

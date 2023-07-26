@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "firezone.servicewireguard.name" . }}
+  labels:
+    {{- include "firezone.labels" . | nindent 4 }}
+  namespace: {{ include "firezone.namespace" . | quote }}  
+  {{- if .Values.firezone.servicewireguard.metadata.annotations }}
+  annotations:
+    {{- toYaml .Values.firezone.servicewireguard.metadata.annotations | nindent 4 }}
+  {{- end }}   
+spec:
+  {{- if .Values.firezone.servicewireguard.externalIPs }}
+  externalIPs:
+  {{- range .Values.firezone.servicewireguard.externalIPs }}
+    - {{ . }}
+  {{- end }}
+  {{- end }}
+  type: {{ .Values.firezone.servicewireguard.type }}
+  {{- if .Values.firezone.servicewireguard.loadBalancerClass }}
+  loadBalancerClass: {{ .Values.firezone.servicewireguard.loadBalancerClass }}
+  {{- end }}
+  ports:
+    - port: {{ .Values.firezone.servicewireguard.port }}
+      targetPort: wireguard
+      protocol: UDP
+      name: wireguard
+  selector:
+    {{- include "firezone.selectorLabels" . | nindent 4 }}

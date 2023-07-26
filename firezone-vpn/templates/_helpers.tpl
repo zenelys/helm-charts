@@ -34,12 +34,8 @@ Create chart name and version as used by the chart label.
 Common labels
 */}}
 {{- define "firezone.labels" -}}
-helm.sh/chart: {{ include "firezone.chart" . }}
+helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
 {{ include "firezone.selectorLabels" . }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
 {{/*
@@ -72,13 +68,11 @@ Service wireguard
 {{ default (printf "%s-%s" (include "firezone.name" .) "service") .Values.firezone.servicewireguard.metadata.name }}
 {{- end }}
 
-
-
-
 {{/*
 Common labels
 */}}
 {{- define "postgres.labels" -}}
+helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
 {{ include "postgres.selectorLabels" . }}
 {{- end }}
 
@@ -90,7 +84,6 @@ app.kubernetes.io/name: postgres
 app.kubernetes.io/instance: postgres
 app.kubernetes.io/component: postgres
 {{- end }}
-
 
 {{/*
 Service db

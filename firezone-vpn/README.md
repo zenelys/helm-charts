@@ -74,8 +74,8 @@ helm install firezone . --values values.yaml
 | `firezone.servicewireguard.metadata.name`        | Firezone vpn traffic service name (Optional).                      | `""`        |
 | `firezone.servicewireguard.metadata.labels`      | Extra labels for firezone vpn traffic service.                     | `{}`        |
 | `firezone.servicewireguard.metadata.annotations` | Annotations for firezone vpn traffic service.                      | `{}`        |
-| `firezone.servicewireguard.type`                 | Firezone vpn traffic service type.                                 | `ClusterIP` |
-| `firezone.servicewireguard.loadBalancerClass`    | LoadbalancerClass for vpn traffic service If type is LoadBalancer. | `nil`       |
+| `firezone.servicewireguard.type`                 | Firezone vpn traffic service type.                                 | `LoadBalancer` |
+| `firezone.servicewireguard.loadBalancerClass`    | LoadbalancerClass for vpn traffic service.                         | `""`        |
 | `firezone.servicewireguard.port`                 | Port to expose for firezone vpn traffic service.                   | `51820`     |
 
 ### Firezone Ingress Specifies settings for the Kubernetes Ingress resource
@@ -99,7 +99,7 @@ helm install firezone . --values values.yaml
 | `firezone.secret.name`        | Firezone secret name.                 | `""`  |
 | `firezone.secret.labels`      | Firezone secret labels.               | `{}`  |
 | `firezone.secret.annotations` | Firezone secret annotations.          | `{}`  |
-| `firezone.secret.data`        | If You want to change default values. | `[]`  |
+| `firezone.secret.data`        | If You want to change default values. | `{}`  |
 
 >You can generate vales with this command. `docker run --rm firezone/firezone bin/gen-env > .env`
 
@@ -178,7 +178,7 @@ helm install firezone . --values values.yaml
 | `postgres.secret.name`        | Postgres secret name.        | `""`  |
 | `postgres.secret.labels`      | Postgres secret labels.      | `{}`  |
 | `postgres.secret.annotations` | Postgres secret annotations. | `{}`  |
-| `postgres.secret.data`        | Postgres secret data.        | `[]`  |
+| `postgres.secret.data`        | Postgres secret data.        | `{}`  |
 
 >If You have changed values in `Firezone Secret to custom`, then required to add value `DATABASE_PASSWORD` from `.env` in data section.
 

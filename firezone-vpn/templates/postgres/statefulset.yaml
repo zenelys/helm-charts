@@ -6,7 +6,7 @@ metadata:
   name: postgres
   namespace: {{ include "firezone.namespace" . | quote }}
   labels:
-    {{- (include "postgres.labels" .) | nindent 4 }}
+    {{- include "postgres.labels" . | nindent 4 }}
     {{- if .Values.postgres.stateful.metadata.labels }}
       {{- toYaml .Values.postgres.stateful.metadata.labels | nindent 4 }}
     {{- end }}         
@@ -20,7 +20,7 @@ spec:
   replicas: {{ .Values.postgres.replicaCount }}
   selector:
     matchLabels:
-      {{- include "postgres.labels" . | nindent 6 }}
+      {{- include "postgres.selectorLabels" . | nindent 6 }}
       {{- if .Values.postgres.stateful.metadata.labels }}
       {{- toYaml .Values.postgres.stateful.metadata.labels | nindent 6 }}
       {{- end }}   

@@ -78,17 +78,17 @@ firezone:
 ## @param firezone.servicewireguard.metadata.labels Extra labels for firezone vpn traffic service.
 ## @param firezone.servicewireguard.metadata.annotations Annotations for firezone vpn traffic service.
 ## @param firezone.servicewireguard.type Firezone vpn traffic service type.
-## @param firezone.servicewireguard.loadBalancerClass LoadbalancerClass for vpn traffic service If type is LoadBalancer.
+## @param firezone.servicewireguard.loadBalancerClass LoadbalancerClass for vpn traffic service.
 ## @param firezone.servicewireguard.port Port to expose for firezone vpn traffic service.
   servicewireguard:
     metadata:
       name: ""
       labels: {}
       annotations: {}
-    type: ClusterIP
-    # IF Type LoadBalancer  
-    loadBalancerClass: 
-      # key: value
+    type: LoadBalancer
+    loadBalancerClass: ""
+    ## For AWS EKS use that example 
+    ## loadBalancerClass: "service.k8s.aws/nlb"
     port: 51820
 
 
@@ -125,7 +125,7 @@ firezone:
     name: ""
     labels: {}
     annotations: {}
-    data: [] 
+    data: {}
 
 ## @section Firezone Persistence Volume
 ## @param firezone.persistence.type persistence type.
@@ -218,7 +218,7 @@ postgres:
     name: ""
     labels: {}
     annotations: {}
-    data: []
+    data: {}
 
 ## @section Postgres Persistence Volume
 ## @param postgres.persistence.type Persistence type.
