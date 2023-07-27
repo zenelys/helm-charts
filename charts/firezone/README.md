@@ -136,9 +136,9 @@ helm upgrade -i firezone zenelys/firezone
 | Name                                     | Description                                                                           | Value          |
 | ---------------------------------------- | ------------------------------------------------------------------------------------- | -------------- |
 | `postgres.enabled`                       | Enable/disable PostgreSQL.(Optional).                                                 | `true`         |
-| `postgres.stateful.metadata.name`        | Postgres statedulset name (Optional).                                                 | `""`           |
-| `postgres.stateful.metadata.labels`      | Annotations for postgres statefulset.                                                 | `{}`           |
-| `postgres.stateful.metadata.annotations` | Extra labels for statefulset.                                                         | `{}`           |
+| `postgres.metadata.name`        | Postgres statedulset name (Optional).                                                 | `""`           |
+| `postgres.metadata.labels`      | Annotations for postgres statefulset.                                                 | `{}`           |
+| `postgres.metadata.annotations` | Extra labels for statefulset.                                                         | `{}`           |
 | `postgres.replicaCount`                  | The number of replicas (instances) of the application that should be running          | `1`            |
 | `postgres.image.registry`                | Specifies The Container image registry.                                               | `library`      |
 | `postgres.image.repository`              | Specifies the Container image to use for the application and its associated settings. | `""`           |

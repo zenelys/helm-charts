@@ -144,16 +144,15 @@ firezone:
 
 ## @section Firezone postgres db statefulset
 ## @param postgres.enabled Enable/disable PostgreSQL.(Optional).
-## @param postgres.stateful.metadata.name Postgres statedulset name (Optional).
-## @param postgres.stateful.metadata.labels Annotations for postgres statefulset.
-## @param postgres.stateful.metadata.annotations Extra labels for statefulset. 
+## @param postgres.metadata.name Postgres StatefulSet name (Optional).
+## @param postgres.metadata.labels Annotations for postgres StatefulSet.
+## @param postgres.metadata.annotations Extra labels for StatefulSet. 
 postgres:
   enabled: true
-  stateful:
-    metadata:
-      name: ""
-      labels: {}
-      annotations: {} 
+  metadata:
+    name: ""
+    labels: {}
+    annotations: {} 
 
 ## @param postgres.replicaCount The number of replicas (instances) of the application that should be running
   replicaCount: 1
