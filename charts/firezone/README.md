@@ -12,21 +12,14 @@ This chart deploys Firezone VPN to Your K8S Cluster.
 Clone repository to Your Local PC. (Only Users in that Organization can do it).
 
 ```bash
-git clone git@github.com:zenelys/helm-charts.git
-
-cd firezone-vpn
+helm repo add zenelys https://zenelys.github.io/helm-charts
+helm repo update
 ```
 
-Run the following command
+> Note. Refer to comment to set proper values in the `values.yaml`
 
 ```bash
-helm install firezone -n firezone . --create namespace
-```
-
-Or You can create Your own `values.yaml` and install Chart from it.
-
-```bash
-helm install firezone . --values values.yaml
+helm upgrade -i firezone zenelys/firezone
 ```
 
 ## Parameters
