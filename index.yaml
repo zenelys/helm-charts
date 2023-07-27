@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  firezone:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2023-07-27T19:38:08.904372521+04:00"
+    description: A Helm chart for Kubernetes
+    digest: 66543e80e9a0acd20eb308bdd6577ff6d606f286b40d70a467991ed50c5b54cd
+    name: firezone
+    type: application
+    urls:
+    - firezone-0.1.0.tgz
+    version: 0.1.0
+generated: "2023-07-27T19:38:08.903374681+04:00"
